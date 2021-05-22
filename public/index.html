@@ -29,7 +29,7 @@
       return currentUser.token.access_token;
     }
 
-    document.getElementById("test").addEventListener("click", () => {
+    document.getElementById("test").addEventListener("click", async () => {
       const token = await getToken();
 
       fetch('/.netlify/functions/test', {
