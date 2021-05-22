@@ -19,8 +19,22 @@
 
   <button id="test">Get data</button>
   <script>
+    async function getToken() {
+      const currentUser = netlifyIdentity.currentUser();
+      if (!currentUser) {
+        return '';
+      }
+      // fetchs new JWT token only if expired
+      await currentUser.jwt();
+      return currentUser.token.access_token;
+    }
+
     document.getElementById("test").addEventListener("click", () => {
-      fetch('/.netlify/functions/test')
+      const token = await getToken();
+
+      fetch('/.netlify/functions/test', {
+        headers: { Authorization: `Bearer ${token}` }
+      })
       .then(response => response.json())
       .then(data => console.log(data));
     });
